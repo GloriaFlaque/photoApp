@@ -15,27 +15,35 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
 
   File image;
+  var resultList = new File('');
+
 
 //  To use Gallery or File Manager to pick Image
 //  Comment Line No. 19 and uncomment Line number 20
   picker() async {
+
     print('Picker is called');
-    File img = await ImagePicker.pickImage(source: ImageSource.camera);
-//    File img = await ImagePicker.pickImage(source: ImageSource.gallery);
+    //File img = await ImagePicker.pickImage(source: ImageSource.camera);
+    File img = await ImagePicker.pickImage(source: ImageSource.gallery);
     if (img != null) {
       image = img;
+      resultList = image;
       setState(() {});
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
-    var images;
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),
       ),
-      body: GridView.builder(
+      body: 
+      new Container(
+        child: Center(child: resultList == null
+      ? new Text('No Image to Show ')
+        : new GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
         itemBuilder: (c, position) {
           return GestureDetector(
@@ -46,14 +54,16 @@ class _HomeState extends State<Home> {
               padding: const EdgeInsets.all(5.0),
               child: Container(
                 color: Colors.blue,
-                child: Center(child: image == null
-                    ? new Text('No Image to Show ')
-                    : new Image.file(image),),
+                child:
+                Image.file(resultList),
               ),
             ),
+
           );
         },
-        itemCount: images.length,
+        //itemCount: resultList.length(),
+      ),
+        ),
       ),
       floatingActionButton: new FloatingActionButton(
         onPressed: picker,
